@@ -1,5 +1,5 @@
 {
-  "name": "depay-blockchain-transactions",
+  "name": "depay-blockchain-transaction",
   "moduleName": "BlockchainTransaction",
   "version": "0.9.0",
   "description": "JavaScript library abstracting blockchain transactions. Including lazy evaluation, transaction tracking etc.",
@@ -19,7 +19,7 @@
     "test:units": "yarn build && npx jest --no-cache",
     "test": "yarn test:units"
   },
-  "repository": "git@github.com:DePayFi/depay-blockchain-transactions.git",
+  "repository": "git@github.com:DePayFi/depay-blockchain-transaction.git",
   "keywords": [
     "react",
     "dialog"
@@ -27,9 +27,9 @@
   "author": "depay.fi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DePayFi/depay-blockchain-transactions/issues"
+    "url": "https://github.com/DePayFi/depay-blockchain-transaction/issues"
   },
-  "homepage": "https://github.com/DePayFi/depay-blockchain-transactions#readme",
+  "homepage": "https://github.com/DePayFi/depay-blockchain-transaction#readme",
   "private": false,
   "dependencies": {
     "ethers": "^5.3.1"
