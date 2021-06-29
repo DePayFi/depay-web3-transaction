@@ -1,13 +1,13 @@
 ## Quickstart
 
 ```
-yarn add depay-blockchain-call
+yarn add depay-blockchain-transaction
 ```
 
 or 
 
 ```
-npm install --save depay-blockchain-call
+npm install --save depay-blockchain-transaction
 ```
 
 ```javascript
