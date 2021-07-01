@@ -12,21 +12,24 @@ export default {
     {
       format: 'cjs',
       globals: {
-        'ethers': 'ethers'
+        'ethers': 'ethers',
+        'depay-blockchain-constants': 'BlockchainConstants'
       },
       file: 'dist/cjs/index.js'
     },
     {
       format: 'es',
       globals: {
-        'ethers': 'ethers'
+        'ethers': 'ethers',
+        'depay-blockchain-constants': 'BlockchainConstants'
       },
       file: 'dist/es/index.js'
     },
     {
       format: 'umd',
       globals: {
-        'ethers': 'ethers'
+        'ethers': 'ethers',
+        'depay-blockchain-constants': 'BlockchainConstants'
       },
       name: pkg.moduleName,
       file: 'dist/umd/index.js'

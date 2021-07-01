@@ -1,17 +1,30 @@
 import submitEthereum from './ethereum/submit'
+import { ethers } from 'ethers'
+import CONSTANTS from 'depay-blockchain-constants'
 
 class Transaction {
-  constructor({ blockchain, address, api, method, params, sent, confirmed, safe }) {
+  constructor({ blockchain, address, api, method, params, value, sent, confirmed, safe }) {
     this.blockchain = blockchain
     this.address = address
     this.api = api
     this.method = method
     this.params = params
+    this.value = this.bigNumberify(value)
     this.sent = sent
     this.confirmed = confirmed
     this.safe = safe
     this._confirmed = false
     this._safe = false
+  }
+
+  bigNumberify(value) {
+    if (typeof value === 'number') {
+      return ethers.BigNumber.from(value).mul(
+        ethers.BigNumber.from(10).pow(ethers.BigNumber.from(CONSTANTS[this.blockchain].DECIMALS)),
+      )
+    } else {
+      return value
+    }
   }
 
   confirmation() {

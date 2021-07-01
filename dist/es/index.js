@@ -1,4 +1,5 @@
-import ethers from 'ethers';
+import ethers, { ethers as ethers$1 } from 'ethers';
+import CONSTANTS from 'depay-blockchain-constants';
 
 function submitEthereum (transaction) {
   return new Promise((resolve, reject) => {
@@ -15,7 +16,7 @@ function submitEthereum (transaction) {
 
     contract
       .connect(signer)
-      [transaction.method](...args)
+      [transaction.method](...args, { value: transaction.value })
       .then((sentTransaction) => {
         if (sentTransaction) {
           transaction.id = sentTransaction.hash;
@@ -37,17 +38,28 @@ function submitEthereum (transaction) {
 }
 
 class Transaction {
-  constructor({ blockchain, address, api, method, params, sent, confirmed, safe }) {
+  constructor({ blockchain, address, api, method, params, value, sent, confirmed, safe }) {
     this.blockchain = blockchain;
     this.address = address;
     this.api = api;
     this.method = method;
     this.params = params;
+    this.value = this.bigNumberify(value);
     this.sent = sent;
     this.confirmed = confirmed;
     this.safe = safe;
     this._confirmed = false;
     this._safe = false;
+  }
+
+  bigNumberify(value) {
+    if (typeof value === 'number') {
+      return ethers$1.BigNumber.from(value).mul(
+        ethers$1.BigNumber.from(10).pow(ethers$1.BigNumber.from(CONSTANTS[this.blockchain].DECIMALS)),
+      )
+    } else {
+      return value
+    }
   }
 
   confirmation() {

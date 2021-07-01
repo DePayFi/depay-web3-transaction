@@ -64,11 +64,37 @@ let transaction = new Transaction({
 
 `params: object`: Parameters passed to the method.
 
+`value: object`: Value of the transaction (amount of the native blockchain currency sent along with the transaction).
+
 `sent: function`: Callback to be executed if transaction has been sent to the network.
 
 `confirmed: function`: Callback to be executed if transaction has been confirmed once by the network.
 
 `safe: function`: Callback to be executed if transaction has been reached safe amount of confirmations.
+
+#### value
+
+If value is passed as a number it's gonna be converted into a big number applying the individual blockhain's default decimals:
+
+```javascript
+let transaction = new Transaction({
+  ...,
+  value: 1
+})
+
+transaction.value // '1000000000000000000'
+```
+
+If value is passed as a string or as a BigNumber, value is used just as provided:
+
+```javascript
+let transaction = new Transaction({
+  ...,
+  value: '1000000000000000000'
+})
+
+transaction.value // '1000000000000000000'
+```
 
 ### submit
 

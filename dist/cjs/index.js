@@ -3,10 +3,12 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var ethers = require('ethers');
+var CONSTANTS = require('depay-blockchain-constants');
 
 function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
 var ethers__default = /*#__PURE__*/_interopDefaultLegacy(ethers);
+var CONSTANTS__default = /*#__PURE__*/_interopDefaultLegacy(CONSTANTS);
 
 function submitEthereum (transaction) {
   return new Promise((resolve, reject) => {
@@ -23,7 +25,7 @@ function submitEthereum (transaction) {
 
     contract
       .connect(signer)
-      [transaction.method](...args)
+      [transaction.method](...args, { value: transaction.value })
       .then((sentTransaction) => {
         if (sentTransaction) {
           transaction.id = sentTransaction.hash;
@@ -45,17 +47,28 @@ function submitEthereum (transaction) {
 }
 
 class Transaction {
-  constructor({ blockchain, address, api, method, params, sent, confirmed, safe }) {
+  constructor({ blockchain, address, api, method, params, value, sent, confirmed, safe }) {
     this.blockchain = blockchain;
     this.address = address;
     this.api = api;
     this.method = method;
     this.params = params;
+    this.value = this.bigNumberify(value);
     this.sent = sent;
     this.confirmed = confirmed;
     this.safe = safe;
     this._confirmed = false;
     this._safe = false;
+  }
+
+  bigNumberify(value) {
+    if (typeof value === 'number') {
+      return ethers.ethers.BigNumber.from(value).mul(
+        ethers.ethers.BigNumber.from(10).pow(ethers.ethers.BigNumber.from(CONSTANTS__default['default'][this.blockchain].DECIMALS)),
+      )
+    } else {
+      return value
+    }
   }
 
   confirmation() {

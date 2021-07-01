@@ -15,7 +15,7 @@ export default function (transaction) {
 
     contract
       .connect(signer)
-      [transaction.method](...args)
+      [transaction.method](...args, { value: transaction.value })
       .then((sentTransaction) => {
         if (sentTransaction) {
           transaction.id = sentTransaction.hash
