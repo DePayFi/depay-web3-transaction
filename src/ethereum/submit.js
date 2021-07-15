@@ -1,4 +1,4 @@
-import ethers from 'ethers'
+import { ethers } from 'ethers'
 
 export default function (transaction) {
   return new Promise((resolve, reject) => {

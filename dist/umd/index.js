@@ -6,13 +6,12 @@
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
-  var ethers__default = /*#__PURE__*/_interopDefaultLegacy(ethers);
   var CONSTANTS__default = /*#__PURE__*/_interopDefaultLegacy(CONSTANTS);
 
   function submitEthereum (transaction) {
     return new Promise((resolve, reject) => {
-      let provider = new ethers__default['default'].providers.Web3Provider(window.ethereum);
-      let contract = new ethers__default['default'].Contract(transaction.address, transaction.api, provider);
+      let provider = new ethers.ethers.providers.Web3Provider(window.ethereum);
+      let contract = new ethers.ethers.Contract(transaction.address, transaction.api, provider);
       let signer = provider.getSigner(0);
       let fragment = contract.interface.fragments.find((fragment) => {
         return fragment.name == transaction.method

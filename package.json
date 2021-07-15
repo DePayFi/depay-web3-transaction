@@ -1,7 +1,7 @@
 {
   "name": "depay-blockchain-transaction",
   "moduleName": "BlockchainTransaction",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript library abstracting blockchain transactions. Including lazy evaluation, transaction tracking etc.",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
