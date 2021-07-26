@@ -1,8 +1,7 @@
 import { ethers } from 'ethers'
 
-export default function (transaction) {
+export default function ({ provider, transaction }) {
   return new Promise((resolve, reject) => {
-    let provider = new ethers.providers.Web3Provider(window.ethereum)
     let contract = new ethers.Contract(transaction.address, transaction.api, provider)
     let signer = provider.getSigner(0)
     let fragment = contract.interface.fragments.find((fragment) => {
@@ -30,7 +29,7 @@ export default function (transaction) {
           })
           resolve(transaction)
         } else {
-          reject('BlockchainTransaction: No transaction has been submitted!')
+          reject('Web3Transaction: Submitting transaction failed!')
         }
       })
   })

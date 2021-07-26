@@ -1,6 +1,7 @@
-import submitEthereum from './ethereum/submit'
+import submitEthereum from './blockchains/ethereum/submit'
+import submitBsc from './blockchains/bsc/submit'
 import { ethers } from 'ethers'
-import CONSTANTS from 'depay-blockchain-constants'
+import { CONSTANTS } from 'depay-web3-constants'
 
 class Transaction {
   constructor({ blockchain, address, api, method, params, value, sent, confirmed, safe }) {
@@ -58,8 +59,11 @@ class Transaction {
       case 'ethereum':
         return submitEthereum(this)
         break
+      case 'bsc':
+        return submitBsc(this)
+        break
       default:
-        throw 'BlockchainTransaction: Unknown blockchain'
+        throw 'Web3Transaction: Unknown blockchain'
     }
   }
 }

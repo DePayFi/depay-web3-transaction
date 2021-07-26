@@ -3,15 +3,10 @@
 Object.defineProperty(exports, '__esModule', { value: true });
 
 var ethers = require('ethers');
-var CONSTANTS = require('depay-blockchain-constants');
+var depayWeb3Constants = require('depay-web3-constants');
 
-function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
-
-var CONSTANTS__default = /*#__PURE__*/_interopDefaultLegacy(CONSTANTS);
-
-function submitEthereum (transaction) {
+function submit ({ provider, transaction }) {
   return new Promise((resolve, reject) => {
-    let provider = new ethers.ethers.providers.Web3Provider(window.ethereum);
     let contract = new ethers.ethers.Contract(transaction.address, transaction.api, provider);
     let signer = provider.getSigner(0);
     let fragment = contract.interface.fragments.find((fragment) => {
@@ -39,10 +34,18 @@ function submitEthereum (transaction) {
           });
           resolve(transaction);
         } else {
-          reject('BlockchainTransaction: No transaction has been submitted!');
+          reject('Web3Transaction: Submitting transaction failed!');
         }
       });
   })
+}
+
+function submitEthereum (transaction) {
+  return submit({ transaction, provider: new ethers.ethers.providers.Web3Provider(window.ethereum) })
+}
+
+function submitBsc (transaction) {
+  return submit({ transaction, provider: new ethers.ethers.providers.Web3Provider(window.ethereum) })
 }
 
 class Transaction {
@@ -63,7 +66,7 @@ class Transaction {
   bigNumberify(value) {
     if (typeof value === 'number') {
       return ethers.ethers.BigNumber.from(value).mul(
-        ethers.ethers.BigNumber.from(10).pow(ethers.ethers.BigNumber.from(CONSTANTS__default['default'][this.blockchain].DECIMALS)),
+        ethers.ethers.BigNumber.from(10).pow(ethers.ethers.BigNumber.from(depayWeb3Constants.CONSTANTS[this.blockchain].DECIMALS)),
       )
     } else {
       return value
@@ -100,8 +103,10 @@ class Transaction {
     switch (this.blockchain) {
       case 'ethereum':
         return submitEthereum(this)
+      case 'bsc':
+        return submitBsc(this)
       default:
-        throw 'BlockchainTransaction: Unknown blockchain'
+        throw 'Web3Transaction: Unknown blockchain'
     }
   }
 }

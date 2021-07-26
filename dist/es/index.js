@@ -1,9 +1,8 @@
 import { ethers } from 'ethers';
-import CONSTANTS from 'depay-blockchain-constants';
+import { CONSTANTS } from 'depay-web3-constants';
 
-function submitEthereum (transaction) {
+function submit ({ provider, transaction }) {
   return new Promise((resolve, reject) => {
-    let provider = new ethers.providers.Web3Provider(window.ethereum);
     let contract = new ethers.Contract(transaction.address, transaction.api, provider);
     let signer = provider.getSigner(0);
     let fragment = contract.interface.fragments.find((fragment) => {
@@ -31,10 +30,18 @@ function submitEthereum (transaction) {
           });
           resolve(transaction);
         } else {
-          reject('BlockchainTransaction: No transaction has been submitted!');
+          reject('Web3Transaction: Submitting transaction failed!');
         }
       });
   })
+}
+
+function submitEthereum (transaction) {
+  return submit({ transaction, provider: new ethers.providers.Web3Provider(window.ethereum) })
+}
+
+function submitBsc (transaction) {
+  return submit({ transaction, provider: new ethers.providers.Web3Provider(window.ethereum) })
 }
 
 class Transaction {
@@ -92,8 +99,10 @@ class Transaction {
     switch (this.blockchain) {
       case 'ethereum':
         return submitEthereum(this)
+      case 'bsc':
+        return submitBsc(this)
       default:
-        throw 'BlockchainTransaction: Unknown blockchain'
+        throw 'Web3Transaction: Unknown blockchain'
     }
   }
 }

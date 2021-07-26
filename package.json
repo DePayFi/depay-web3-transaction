@@ -1,8 +1,8 @@
 {
-  "name": "depay-blockchain-transaction",
-  "moduleName": "BlockchainTransaction",
-  "version": "1.0.1",
-  "description": "JavaScript library abstracting blockchain transactions. Including lazy evaluation, transaction tracking etc.",
+  "name": "depay-web3-transaction",
+  "moduleName": "Web3Transaction",
+  "version": "2.0.0",
+  "description": "JavaScript library abstracting web3 blockchain transactions. Including lazy execution, confirmation tracking etc.",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
   "source": "src/index.js",
@@ -10,29 +10,31 @@
     "dist"
   ],
   "scripts": {
-    "build": "rm -rf dist && rollup -c",
+    "build": "rm -rf dist && rollup -c rollup.module.config.js",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --fix",
-    "format": "prettier src --write",
     "prepublishOnly": "yarn build",
     "start": "rollup -c rollup.demo.config.js -w",
     "test:units": "yarn build && npx jest --no-cache",
     "test": "yarn test:units"
   },
-  "repository": "git@github.com:DePayFi/depay-blockchain-transaction.git",
+  "repository": "git@github.com:DePayFi/depay-web3-transaction.git",
   "keywords": [
-    "react",
-    "dialog"
+    "web3",
+    "transaction",
+    "blockchain",
+    "confirmations",
+    "tracking"
   ],
   "author": "depay.fi",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/DePayFi/depay-blockchain-transaction/issues"
+    "url": "https://github.com/DePayFi/depay-web3-transaction/issues"
   },
-  "homepage": "https://github.com/DePayFi/depay-blockchain-transaction#readme",
+  "homepage": "https://github.com/DePayFi/depay-web3-transaction#readme",
   "private": false,
   "dependencies": {
-    "depay-blockchain-constants": "^1.4.0",
+    "depay-web3-constants": "^2.0.0",
     "ethers": "^5.3.1"
   },
   "peerDependencies": {},
@@ -42,24 +44,16 @@
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/preset-env": "^7.12.7",
-    "@babel/preset-react": "^7.12.7",
     "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-node-resolve": "^11.2.1",
     "@rollup/plugin-replace": "^2.4.2",
     "@rollup/plugin-sucrase": "^3.1.0",
     "babel-loader": "^8.2.2",
     "babel-preset-env": "^1.7.0",
-    "babel-preset-react": "^6.24.1",
-    "cypress": "^6.2.1",
-    "depay-web3mock": "^1.0.0",
+    "depay-web3-mock": "^5.0.0",
     "eslint": "^7.15.0",
-    "eslint-config-prettier": "^7.0.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-prettier": "^3.2.0",
-    "eslint-plugin-react": "^7.21.5",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "prettier": "^2.2.1",
     "regenerator-runtime": "^0.13.7",
     "rollup": "^2.34.2",
     "rollup-plugin-delete": "^2.0.0",

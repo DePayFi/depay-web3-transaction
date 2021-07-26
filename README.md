@@ -1,17 +1,17 @@
 ## Quickstart
 
 ```
-yarn add depay-blockchain-transaction
+yarn add depay-web3-transaction
 ```
 
 or 
 
 ```
-npm install --save depay-blockchain-transaction
+npm install --save depay-web3-transaction
 ```
 
 ```javascript
-import { Transaction } from 'depay-blockchain-transaction'
+import { Transaction } from 'depay-web3-transaction'
 
 let transaction = new Transaction({
   blockchain: 'ethereum',
@@ -30,6 +30,13 @@ let transaction = new Transaction({
 transaction.submit()
 ```
 
+## Support
+
+This library supports the following blockchains:
+
+- [Ethereum](https://ethereum.org)
+- [Binance Smart Chain](https://www.binance.org/en/smartChain)
+
 ## Functionalities
 
 ### new Transaction
@@ -37,7 +44,7 @@ transaction.submit()
 Prepares a new Transaction. Returns an unsubmitted transaction instance.
 
 ```javascript
-import { Transaction } from 'depay-blockchain-transaction'
+import { Transaction } from 'depay-web3-transaction'
 
 let transaction = new Transaction({
   blockchain: 'ethereum',
