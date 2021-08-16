@@ -65,7 +65,7 @@ class Transaction {
         return submitBsc({ transaction: this, sent, confirmed, safe })
         break
       default:
-        throw 'Web3Transaction: Unknown blockchain'
+        throw('Web3Transaction: Unknown blockchain')
     }
   }
 }

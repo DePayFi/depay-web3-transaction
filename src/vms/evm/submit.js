@@ -34,6 +34,8 @@ export default function ({ transaction, provider, sent, confirmed, safe }) {
         } else {
           reject('Web3Transaction: Submitting transaction failed!')
         }
+      }).catch(()=>{ 
+        reject('Web3Transaction: Submitting transaction failed!')
       })
   })
 }

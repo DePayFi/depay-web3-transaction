@@ -38,6 +38,8 @@
           } else {
             reject('Web3Transaction: Submitting transaction failed!');
           }
+        }).catch(()=>{ 
+          reject('Web3Transaction: Submitting transaction failed!');
         });
     })
   }
@@ -122,7 +124,7 @@
         case 'bsc':
           return submitBsc({ transaction: this, sent, confirmed, safe })
         default:
-          throw 'Web3Transaction: Unknown blockchain'
+          throw('Web3Transaction: Unknown blockchain')
       }
     }
   }

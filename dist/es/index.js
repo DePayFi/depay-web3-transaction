@@ -35,6 +35,8 @@ function submit ({ transaction, provider, sent, confirmed, safe }) {
         } else {
           reject('Web3Transaction: Submitting transaction failed!');
         }
+      }).catch(()=>{ 
+        reject('Web3Transaction: Submitting transaction failed!');
       });
   })
 }
@@ -119,7 +121,7 @@ class Transaction {
       case 'bsc':
         return submitBsc({ transaction: this, sent, confirmed, safe })
       default:
-        throw 'Web3Transaction: Unknown blockchain'
+        throw('Web3Transaction: Unknown blockchain')
     }
   }
 }
