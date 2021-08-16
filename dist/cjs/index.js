@@ -5,7 +5,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var ethers = require('ethers');
 var depayWeb3Constants = require('depay-web3-constants');
 
-function submit ({ provider, transaction }) {
+function submit ({ transaction, provider, sent, confirmed, safe }) {
   return new Promise((resolve, reject) => {
     let contract = new ethers.ethers.Contract(transaction.address, transaction.api, provider);
     let signer = provider.getSigner(0);
@@ -24,13 +24,16 @@ function submit ({ provider, transaction }) {
         if (sentTransaction) {
           transaction.id = sentTransaction.hash;
           if (transaction.sent) transaction.sent(transaction);
+          if (sent) sent(transaction);
           sentTransaction.wait(1).then(() => {
             transaction._confirmed = true;
             if (transaction.confirmed) transaction.confirmed(transaction);
+            if (confirmed) confirmed(transaction);
           });
           sentTransaction.wait(12).then(() => {
             transaction._safe = true;
             if (transaction.safe) transaction.safe(transaction);
+            if (safe) safe(transaction);
           });
           resolve(transaction);
         } else {
@@ -40,12 +43,24 @@ function submit ({ provider, transaction }) {
   })
 }
 
-function submitEthereum (transaction) {
-  return submit({ transaction, provider: new ethers.ethers.providers.Web3Provider(window.ethereum) })
+function submitEthereum ({ transaction, sent, confirmed, safe }) {
+  return submit({
+    transaction,
+    provider: new ethers.ethers.providers.Web3Provider(window.ethereum),
+    sent,
+    confirmed,
+    safe
+  })
 }
 
-function submitBsc (transaction) {
-  return submit({ transaction, provider: new ethers.ethers.providers.Web3Provider(window.ethereum) })
+function submitBsc ({ transaction, sent, confirmed, safe }) {
+  return submit({
+    transaction,
+    provider: new ethers.ethers.providers.Web3Provider(window.ethereum),
+    sent,
+    confirmed,
+    safe
+  })
 }
 
 class Transaction {
@@ -99,12 +114,14 @@ class Transaction {
     })
   }
 
-  submit() {
+  submit(options) {
+    let { sent, confirmed, safe } = options ? options : {};
+
     switch (this.blockchain) {
       case 'ethereum':
-        return submitEthereum(this)
+        return submitEthereum({ transaction: this, sent, confirmed, safe })
       case 'bsc':
-        return submitBsc(this)
+        return submitBsc({ transaction: this, sent, confirmed, safe })
       default:
         throw 'Web3Transaction: Unknown blockchain'
     }

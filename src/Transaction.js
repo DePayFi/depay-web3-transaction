@@ -54,13 +54,15 @@ class Transaction {
     })
   }
 
-  submit() {
+  submit(options) {
+    let { sent, confirmed, safe } = options ? options : {}
+
     switch (this.blockchain) {
       case 'ethereum':
-        return submitEthereum(this)
+        return submitEthereum({ transaction: this, sent, confirmed, safe })
         break
       case 'bsc':
-        return submitBsc(this)
+        return submitBsc({ transaction: this, sent, confirmed, safe })
         break
       default:
         throw 'Web3Transaction: Unknown blockchain'

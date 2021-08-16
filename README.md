@@ -111,6 +111,24 @@ Submits a transaction.
 transaction.submit()
 ```
 
+You can configure the following attributes inisde an object passed to `submit`:
+
+`sent: function`: Callback to be executed if transaction has been sent to the network.
+
+`confirmed: function`: Callback to be executed if transaction has been confirmed once by the network.
+
+`safe: function`: Callback to be executed if transaction has been reached safe amount of confirmations.
+
+Passing additional callbacks in the `submit` object will not override already defined callbacks but will queue additional ones.
+
+```javascript
+transaction.submit({
+  sent: ()=>{ 'do something' },
+  confirmed: ()=>{ 'do something' },
+  safe: ()=>{ 'do something' }
+})
+```
+
 ## Development
 
 ### Get started
