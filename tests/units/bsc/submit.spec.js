@@ -71,4 +71,32 @@ describe('submit BSC Transaction', () => {
 
     expect(sentTransaction == undefined).toEqual(false)
   })
+
+  it('populates basic information for the transaction after sent', async () => {
+    let mockedTransaction = mock({
+      blockchain: 'bsc',
+      transaction: {
+        to: toAddress,
+        api: api,
+        method: method,
+        params: params
+      }
+    })
+    
+    let transaction = new Transaction({
+      blockchain: 'bsc',
+      address: toAddress,
+      api: api,
+      method: method,
+      params: params
+    })
+
+    let sentTransaction
+    await transaction.submit().then((transaction)=>{
+      sentTransaction = transaction
+    })
+
+    expect(sentTransaction.id == undefined).toEqual(false)
+    expect(sentTransaction.url).toEqual(`https://bscscan.io/tx/${sentTransaction.id}`)
+  })
 })

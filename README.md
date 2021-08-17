@@ -129,6 +129,26 @@ transaction.submit({
 })
 ```
 
+## Data Structure
+
+### Transaction
+
+`blockchain: string`: Blockchain the transaction belongs to.
+
+`address: string`: Address the transaction is interacting with.
+
+`api: array`: Api of a contract the transaction is interacting with.
+
+`method: string`: The method name of the contract the transaction is interacting with.
+
+`params: object`: Params the transaction is passing to the contract method.
+
+`value: BigNumber`: Amount/value of the native token the transaction is forwarding as part of the interaction.
+
+`id: string`: Unique identifier of the transaction, also known as transaction hash, only populated if transaction has been submitted to the network.
+
+`url: string`: A url to display the transaction status in a browser.
+
 ## Development
 
 ### Get started

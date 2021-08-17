@@ -8,5 +8,8 @@ export default function ({ transaction, sent, confirmed, safe }) {
     sent,
     confirmed,
     safe
+  }).then((transaction)=>{
+    transaction.url = `https://bscscan.io/tx/${transaction.id}`
+    return transaction
   })
 }

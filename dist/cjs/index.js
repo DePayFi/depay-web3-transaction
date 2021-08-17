@@ -52,6 +52,9 @@ function submitEthereum ({ transaction, sent, confirmed, safe }) {
     sent,
     confirmed,
     safe
+  }).then((transaction)=>{
+    transaction.url = `https://etherscan.io/tx/${transaction.id}`;
+    return transaction
   })
 }
 
@@ -62,6 +65,9 @@ function submitBsc ({ transaction, sent, confirmed, safe }) {
     sent,
     confirmed,
     safe
+  }).then((transaction)=>{
+    transaction.url = `https://bscscan.io/tx/${transaction.id}`;
+    return transaction
   })
 }
 
