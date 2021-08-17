@@ -36,10 +36,12 @@
             });
             resolve(transaction);
           } else {
+            console.log('sentTransaction undefined');
             reject('Web3Transaction: Submitting transaction failed!');
           }
-        }).catch((error)=>{ 
-          reject('Web3Transaction: Submitting transaction failed!', error);
+        }).catch((error)=>{
+          console.log(error);
+          reject('Web3Transaction: Submitting transaction failed!');
         });
     })
   }
