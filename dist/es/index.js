@@ -35,8 +35,8 @@ function submit ({ transaction, provider, sent, confirmed, safe }) {
         } else {
           reject('Web3Transaction: Submitting transaction failed!');
         }
-      }).catch(()=>{ 
-        reject('Web3Transaction: Submitting transaction failed!');
+      }).catch((error)=>{ 
+        reject('Web3Transaction: Submitting transaction failed!', error);
       });
   })
 }

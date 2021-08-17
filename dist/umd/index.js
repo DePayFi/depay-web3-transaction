@@ -38,8 +38,8 @@
           } else {
             reject('Web3Transaction: Submitting transaction failed!');
           }
-        }).catch(()=>{ 
-          reject('Web3Transaction: Submitting transaction failed!');
+        }).catch((error)=>{ 
+          reject('Web3Transaction: Submitting transaction failed!', error);
         });
     })
   }
