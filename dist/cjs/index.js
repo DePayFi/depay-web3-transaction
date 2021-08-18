@@ -5,21 +5,30 @@ Object.defineProperty(exports, '__esModule', { value: true });
 var ethers = require('ethers');
 var depayWeb3Constants = require('depay-web3-constants');
 
+const argsFromTransaction = ({ transaction, contract })=> {
+  let fragment = contract.interface.fragments.find((fragment) => {
+    return fragment.name == transaction.method
+  });
+
+  if(transaction.params instanceof Array) {
+    return transaction.params
+  } else if (transaction.params instanceof Object) {
+    return fragment.inputs.map((input) => {
+      return transaction.params[input.name]
+    })
+  } else {
+    throw 'Web3Transaction: params have wrong type!'
+  }
+};
+
 function submit ({ transaction, provider, sent, confirmed, safe }) {
   return new Promise((resolve, reject) => {
     let contract = new ethers.ethers.Contract(transaction.address, transaction.api, provider);
     let signer = provider.getSigner(0);
-    let fragment = contract.interface.fragments.find((fragment) => {
-      return fragment.name == transaction.method
-    });
-
-    let args = fragment.inputs.map((input) => {
-      return transaction.params[input.name]
-    });
 
     contract
       .connect(signer)
-      [transaction.method](...args, { value: transaction.value })
+      [transaction.method](...argsFromTransaction({ transaction, contract }), { value: transaction.value })
       .then((sentTransaction) => {
         if (sentTransaction) {
           transaction.id = sentTransaction.hash;

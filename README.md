@@ -69,7 +69,7 @@ let transaction = new Transaction({
 
 `method: string`: Name of the contract method to be called.
 
-`params: object`: Parameters passed to the method.
+`params: object or array`: Parameters passed to the method.
 
 `value: object`: Value of the transaction (amount of the native blockchain currency sent along with the transaction).
 
@@ -141,7 +141,7 @@ transaction.submit({
 
 `method: string`: The method name of the contract the transaction is interacting with.
 
-`params: object`: Params the transaction is passing to the contract method.
+`params: object or array`: Params the transaction is passing to the contract method.
 
 `value: BigNumber`: Amount/value of the native token the transaction is forwarding as part of the interaction.
 
