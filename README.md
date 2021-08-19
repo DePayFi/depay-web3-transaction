@@ -13,6 +13,8 @@ npm install --save depay-web3-transaction
 ```javascript
 import { Transaction } from 'depay-web3-transaction'
 
+// Send Smart Contract Transaction
+
 let transaction = new Transaction({
   blockchain: 'ethereum',
   address: '0xae60ac8e69414c2dc362d0e6a03af643d1d85b92',
@@ -28,6 +30,17 @@ let transaction = new Transaction({
 })
 
 transaction.submit()
+
+// Simple Value Transfer
+
+let transaction = new Transaction({
+  blockchain: 'ethereum',
+  address: '0xcecA130Dea14fbB48E0FB19A4b0BaDf274c444e1',
+  value: 0.12321
+})
+
+transaction.submit()
+// will send 0.12321 ETH to 0xcecA130Dea14fbB48E0FB19A4b0BaDf274c444e1
 ```
 
 ## Support
@@ -61,23 +74,23 @@ let transaction = new Transaction({
 })
 ```
 
-`blockchain: string`: Name of the blockchain ['ethereum'].
+`blockchain: String`: Name of the blockchain ['ethereum'].
 
-`address: string`: Address of the contract to be transacted with.
+`address: String`: Address of the contract to be transacted with.
 
-`api: array`: Api of the contract (e.g. abi for Ethereum).
+`api: Array`: Api of the contract (e.g. abi for Ethereum).
 
-`method: string`: Name of the contract method to be called.
+`method: String`: Name of the contract method to be called.
 
-`params: object or array`: Parameters passed to the method.
+`params: Object or Array`: Parameters passed to the method.
 
-`value: object`: Value of the transaction (amount of the native blockchain currency sent along with the transaction).
+`value: BigNumber`: Value of the transaction (amount of the native blockchain currency sent along with the transaction).
 
-`sent: function`: Callback to be executed if transaction has been sent to the network.
+`sent: Function`: Callback to be executed if transaction has been sent to the network.
 
-`confirmed: function`: Callback to be executed if transaction has been confirmed once by the network.
+`confirmed: Function`: Callback to be executed if transaction has been confirmed once by the network.
 
-`safe: function`: Callback to be executed if transaction has been reached safe amount of confirmations.
+`safe: Function`: Callback to be executed if transaction has been reached safe amount of confirmations.
 
 #### value
 

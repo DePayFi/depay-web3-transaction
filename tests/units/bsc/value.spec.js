@@ -49,6 +49,13 @@ describe('BSC Transaction value', () => {
     expect(mockedTransaction).toHaveBeenCalled()
   });
 
+  it('initalizes and submits a transaction with value provided as float', async ()=> {
+    let mockedTransaction = mockTransaction('100000000000000000')
+    let transaction = createTransaction(0.1)
+    await transaction.submit()
+    expect(mockedTransaction).toHaveBeenCalled()
+  });
+
   it('initalizes and submits a transaction with value provided as a string', async ()=> {
     let mockedTransaction = mockTransaction('1000000000000000000')
     let transaction = createTransaction('1000000000000000000')

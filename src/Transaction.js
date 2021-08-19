@@ -20,9 +20,7 @@ class Transaction {
 
   bigNumberify(value) {
     if (typeof value === 'number') {
-      return ethers.BigNumber.from(value).mul(
-        ethers.BigNumber.from(10).pow(ethers.BigNumber.from(CONSTANTS[this.blockchain].DECIMALS)),
-      )
+      return ethers.utils.parseUnits(value.toString(), CONSTANTS[this.blockchain].DECIMALS)
     } else {
       return value
     }

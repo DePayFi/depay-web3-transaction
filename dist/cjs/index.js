@@ -21,38 +21,62 @@ const argsFromTransaction = ({ transaction, contract })=> {
   }
 };
 
+const submitContractInteraction = ({ transaction, signer, provider })=>{
+  let contract = new ethers.ethers.Contract(transaction.address, transaction.api, provider);
+
+  return contract
+    .connect(signer)
+    [transaction.method](...argsFromTransaction({ transaction, contract }), { value: transaction.value })
+};
+
+const submitSimpleTransfer = ({ transaction, signer })=>{
+  return signer.sendTransaction({
+    to: transaction.address,
+    value: transaction.value
+  })
+};
+
+const processSubmission = ({ sentTransaction, transaction, sent, confirmed, safe, resolve, reject })=> {
+  if (sentTransaction) {
+    transaction.id = sentTransaction.hash;
+    if (transaction.sent) transaction.sent(transaction);
+    if (sent) sent(transaction);
+    sentTransaction.wait(1).then(() => {
+      transaction._confirmed = true;
+      if (transaction.confirmed) transaction.confirmed(transaction);
+      if (confirmed) confirmed(transaction);
+    });
+    sentTransaction.wait(12).then(() => {
+      transaction._safe = true;
+      if (transaction.safe) transaction.safe(transaction);
+      if (safe) safe(transaction);
+    });
+    resolve(transaction);
+  } else {
+    console.log('sentTransaction undefined');
+    reject('Web3Transaction: Submitting transaction failed!');
+  }
+};
+
 function submit ({ transaction, provider, sent, confirmed, safe }) {
   return new Promise((resolve, reject) => {
-    let contract = new ethers.ethers.Contract(transaction.address, transaction.api, provider);
     let signer = provider.getSigner(0);
 
-    contract
-      .connect(signer)
-      [transaction.method](...argsFromTransaction({ transaction, contract }), { value: transaction.value })
-      .then((sentTransaction) => {
-        if (sentTransaction) {
-          transaction.id = sentTransaction.hash;
-          if (transaction.sent) transaction.sent(transaction);
-          if (sent) sent(transaction);
-          sentTransaction.wait(1).then(() => {
-            transaction._confirmed = true;
-            if (transaction.confirmed) transaction.confirmed(transaction);
-            if (confirmed) confirmed(transaction);
-          });
-          sentTransaction.wait(12).then(() => {
-            transaction._safe = true;
-            if (transaction.safe) transaction.safe(transaction);
-            if (safe) safe(transaction);
-          });
-          resolve(transaction);
-        } else {
-          console.log('sentTransaction undefined');
+    if(transaction.method) {
+      submitContractInteraction({ transaction, signer, provider })
+        .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, safe, resolve, reject }))
+        .catch((error)=>{
+          console.log(error);
           reject('Web3Transaction: Submitting transaction failed!');
-        }
-      }).catch((error)=>{
-        console.log(error);
-        reject('Web3Transaction: Submitting transaction failed!');
-      });
+        });
+    } else {
+      submitSimpleTransfer({ transaction, signer })
+        .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, safe, resolve, reject }))
+        .catch((error)=>{
+          console.log(error);
+          reject('Web3Transaction: Submitting transaction failed!');
+        });
+    }
   })
 }
 
@@ -99,9 +123,7 @@ class Transaction {
 
   bigNumberify(value) {
     if (typeof value === 'number') {
-      return ethers.ethers.BigNumber.from(value).mul(
-        ethers.ethers.BigNumber.from(10).pow(ethers.ethers.BigNumber.from(depayWeb3Constants.CONSTANTS[this.blockchain].DECIMALS)),
-      )
+      return ethers.ethers.utils.parseUnits(value.toString(), depayWeb3Constants.CONSTANTS[this.blockchain].DECIMALS)
     } else {
       return value
     }
