@@ -122,7 +122,7 @@ describe('submit BSC Transaction', () => {
       })
 
       expect(sentTransaction.id == undefined).toEqual(false)
-      expect(sentTransaction.url).toEqual(`https://bscscan.io/tx/${sentTransaction.id}`)
+      expect(sentTransaction.url).toEqual(`https://bscscan.com/tx/${sentTransaction.id}`)
     })
   })
 })

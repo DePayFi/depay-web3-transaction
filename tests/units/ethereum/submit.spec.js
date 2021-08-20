@@ -121,7 +121,7 @@ describe('submit Ethereum Transaction', () => {
       })
 
       expect(sentTransaction.id == undefined).toEqual(false)
-      expect(sentTransaction.url).toEqual(`https://etherscan.io/tx/${sentTransaction.id}`)
+      expect(sentTransaction.url).toEqual(`https://etherscan.com/tx/${sentTransaction.id}`)
     })
   })
 

@@ -1,7 +1,7 @@
 {
   "name": "depay-web3-transaction",
   "moduleName": "Web3Transaction",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "JavaScript library abstracting web3 blockchain transactions. Including lazy execution, confirmation tracking etc.",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",

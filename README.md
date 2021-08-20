@@ -160,7 +160,7 @@ transaction.submit({
 
 `id: string`: Unique identifier of the transaction, also known as transaction hash, only populated if transaction has been submitted to the network.
 
-`url: string`: A url to display the transaction status in a browser.
+`url: string`: A url to display the transaction status in a browser on a blockchain explorer.
 
 ## Development
 

@@ -9,7 +9,7 @@ export default function ({ transaction, sent, confirmed, safe }) {
     confirmed,
     safe
   }).then((transaction)=>{
-    transaction.url = `https://bscscan.io/tx/${transaction.id}`
+    transaction.url = `https://bscscan.com/tx/${transaction.id}`
     return transaction
   })
 }

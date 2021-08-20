@@ -9,7 +9,7 @@ export default function ({ transaction, sent, confirmed, safe }) {
     confirmed,
     safe
   }).then((transaction)=>{
-    transaction.url = `https://etherscan.io/tx/${transaction.id}`
+    transaction.url = `https://etherscan.com/tx/${transaction.id}`
     return transaction
   })
 }
