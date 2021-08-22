@@ -116,49 +116,49 @@ describe('BSC Transaction', () => {
     expect(confirmedCalled).toEqual(true);
   });
 
-  it("calls the transaction's safe callback", async ()=> {
-    let safeCalled = false;
+  it("calls the transaction's ensured callback", async ()=> {
+    let ensuredCalled = false;
 
-    transaction.safe = function(){
-      safeCalled = true
+    transaction.ensured = function(){
+      ensuredCalled = true
     }
 
     let submittedTransaction = await transaction.submit()
 
-    expect(safeCalled).toEqual(false);
+    expect(ensuredCalled).toEqual(false);
 
     confirm(mockedTransaction)
 
     await transaction.confirmation()
 
-    expect(safeCalled).toEqual(false);
+    expect(ensuredCalled).toEqual(false);
 
     increaseBlock(12)
     
-    await transaction.safeConfirmation()
+    await transaction.ensurance()
     
-    expect(safeCalled).toEqual(true);
+    expect(ensuredCalled).toEqual(true);
   });
 
-  it("calls the transaction's safe callback also when passed as option to submit", async ()=> {
-    let safeCalled = false;
+  it("calls the transaction's ensured callback also when passed as option to submit", async ()=> {
+    let ensuredCalled = false;
 
     let submittedTransaction = await transaction.submit({
-      safe: function(){ safeCalled = true }
+      ensured: function(){ ensuredCalled = true }
     })
 
-    expect(safeCalled).toEqual(false);
+    expect(ensuredCalled).toEqual(false);
 
     confirm(mockedTransaction)
 
     await transaction.confirmation()
 
-    expect(safeCalled).toEqual(false);
+    expect(ensuredCalled).toEqual(false);
 
     increaseBlock(12)
     
-    await transaction.safeConfirmation()
+    await transaction.ensurance()
     
-    expect(safeCalled).toEqual(true);
+    expect(ensuredCalled).toEqual(true);
   });
 });

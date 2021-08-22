@@ -26,7 +26,7 @@ let transaction = new Transaction({
   },
   sent: function(){},
   confirmed: function(){},
-  safe: function(){}
+  ensured: function(){}
 })
 
 transaction.submit()
@@ -70,7 +70,7 @@ let transaction = new Transaction({
   },
   sent: function(){},
   confirmed: function(){},
-  safe: function(){}
+  ensured: function(){}
 })
 ```
 
@@ -90,7 +90,7 @@ let transaction = new Transaction({
 
 `confirmed: Function`: Callback to be executed if transaction has been confirmed once by the network.
 
-`safe: Function`: Callback to be executed if transaction has been reached safe amount of confirmations.
+`ensured: Function`: Callback to be executed if transaction has been reached safe amount of confirmations (successful transaction confirmation can be ensured).
 
 #### value
 
@@ -130,7 +130,7 @@ You can configure the following attributes inisde an object passed to `submit`:
 
 `confirmed: function`: Callback to be executed if transaction has been confirmed once by the network.
 
-`safe: function`: Callback to be executed if transaction has been reached safe amount of confirmations.
+`ensured: function`: Callback to be executed if transaction has been reached safe amount of confirmations (confirmation can be fairly assumed to be ensured).
 
 Passing additional callbacks in the `submit` object will not override already defined callbacks but will queue additional ones.
 
@@ -138,7 +138,7 @@ Passing additional callbacks in the `submit` object will not override already de
 transaction.submit({
   sent: ()=>{ 'do something' },
   confirmed: ()=>{ 'do something' },
-  safe: ()=>{ 'do something' }
+  ensured: ()=>{ 'do something' }
 })
 ```
 

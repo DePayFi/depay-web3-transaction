@@ -35,7 +35,7 @@
     })
   };
 
-  const processSubmission = ({ sentTransaction, transaction, sent, confirmed, safe, resolve, reject })=> {
+  const processSubmission = ({ sentTransaction, transaction, sent, confirmed, ensured, resolve, reject })=> {
     if (sentTransaction) {
       transaction.id = sentTransaction.hash;
       if (transaction.sent) transaction.sent(transaction);
@@ -46,31 +46,30 @@
         if (confirmed) confirmed(transaction);
       });
       sentTransaction.wait(12).then(() => {
-        transaction._safe = true;
-        if (transaction.safe) transaction.safe(transaction);
-        if (safe) safe(transaction);
+        transaction._ensured = true;
+        if (transaction.ensured) transaction.ensured(transaction);
+        if (ensured) ensured(transaction);
       });
       resolve(transaction);
     } else {
-      console.log('sentTransaction undefined');
       reject('Web3Transaction: Submitting transaction failed!');
     }
   };
 
-  function submit ({ transaction, provider, sent, confirmed, safe }) {
+  function submit ({ transaction, provider, sent, confirmed, ensured }) {
     return new Promise((resolve, reject) => {
       let signer = provider.getSigner(0);
 
       if(transaction.method) {
         submitContractInteraction({ transaction, signer, provider })
-          .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, safe, resolve, reject }))
+          .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, resolve, reject }))
           .catch((error)=>{
             console.log(error);
             reject('Web3Transaction: Submitting transaction failed!');
           });
       } else {
         submitSimpleTransfer({ transaction, signer })
-          .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, safe, resolve, reject }))
+          .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, resolve, reject }))
           .catch((error)=>{
             console.log(error);
             reject('Web3Transaction: Submitting transaction failed!');
@@ -79,26 +78,26 @@
     })
   }
 
-  function submitEthereum ({ transaction, sent, confirmed, safe }) {
+  function submitEthereum ({ transaction, sent, confirmed, ensured }) {
     return submit({
       transaction,
       provider: new ethers.ethers.providers.Web3Provider(window.ethereum),
       sent,
       confirmed,
-      safe
+      ensured
     }).then((transaction)=>{
       transaction.url = `https://etherscan.com/tx/${transaction.id}`;
       return transaction
     })
   }
 
-  function submitBsc ({ transaction, sent, confirmed, safe }) {
+  function submitBsc ({ transaction, sent, confirmed, ensured }) {
     return submit({
       transaction,
       provider: new ethers.ethers.providers.Web3Provider(window.ethereum),
       sent,
       confirmed,
-      safe
+      ensured
     }).then((transaction)=>{
       transaction.url = `https://bscscan.com/tx/${transaction.id}`;
       return transaction
@@ -106,7 +105,7 @@
   }
 
   class Transaction {
-    constructor({ blockchain, address, api, method, params, value, sent, confirmed, safe }) {
+    constructor({ blockchain, address, api, method, params, value, sent, confirmed, ensured }) {
       this.blockchain = blockchain;
       this.address = address;
       this.api = api;
@@ -115,9 +114,9 @@
       this.value = this.bigNumberify(value);
       this.sent = sent;
       this.confirmed = confirmed;
-      this.safe = safe;
+      this.ensured = ensured;
       this._confirmed = false;
-      this._safe = false;
+      this._ensured = false;
     }
 
     bigNumberify(value) {
@@ -141,27 +140,27 @@
       })
     }
 
-    safeConfirmation() {
-      if (this._safe) {
+    ensurance() {
+      if (this._ensured) {
         return Promise.resolve(this)
       }
       return new Promise((resolve, reject) => {
-        let originalSafe = this.safe;
-        this.safe = () => {
-          if (originalSafe) originalSafe(this);
+        let originalEnsured = this.ensured;
+        this.ensured = () => {
+          if (originalEnsured) originalEnsured(this);
           resolve(this);
         };
       })
     }
 
     submit(options) {
-      let { sent, confirmed, safe } = options ? options : {};
+      let { sent, confirmed, ensured } = options ? options : {};
 
       switch (this.blockchain) {
         case 'ethereum':
-          return submitEthereum({ transaction: this, sent, confirmed, safe })
+          return submitEthereum({ transaction: this, sent, confirmed, ensured })
         case 'bsc':
-          return submitBsc({ transaction: this, sent, confirmed, safe })
+          return submitBsc({ transaction: this, sent, confirmed, ensured })
         default:
           throw('Web3Transaction: Unknown blockchain')
       }
