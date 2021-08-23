@@ -1,5 +1,5 @@
 import { Transaction } from 'dist/cjs/index.js'
-import { mock, resetMocks, confirm, increaseBlock } from 'depay-web3-mock'
+import { mock, resetMocks, confirm, fail, increaseBlock } from 'depay-web3-mock'
 
 describe('Ethereum Transaction', () => {
 
@@ -160,5 +160,39 @@ describe('Ethereum Transaction', () => {
     await transaction.ensurance()
     
     expect(ensuredCalled).toEqual(true);
+  });
+
+  it("calls the transaction's failed callback", async ()=> {
+    let failedCalled = false;
+
+    transaction.failed = function(){
+      failedCalled = true
+    }
+
+    let submittedTransaction = await transaction.submit()
+
+    expect(failedCalled).toEqual(false);
+
+    fail(mockedTransaction)
+
+    await transaction.failure()
+    
+    expect(failedCalled).toEqual(true);
+  });
+
+  it("calls the transaction's failed callback also when passed as option to submit", async ()=> {
+    let failedCalled = false;
+
+    let submittedTransaction = await transaction.submit({
+      failed: function(){ failedCalled = true }
+    })
+
+    expect(failedCalled).toEqual(false);
+
+    fail(mockedTransaction)
+
+    await transaction.failure()
+    
+    expect(failedCalled).toEqual(true);
   });
 });

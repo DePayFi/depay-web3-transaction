@@ -26,7 +26,8 @@ let transaction = new Transaction({
   },
   sent: function(){},
   confirmed: function(){},
-  ensured: function(){}
+  ensured: function(){},
+  failed: function(error){}
 })
 
 transaction.submit()
@@ -70,7 +71,8 @@ let transaction = new Transaction({
   },
   sent: function(){},
   confirmed: function(){},
-  ensured: function(){}
+  ensured: function(){},
+  failed: function(error){}
 })
 ```
 
@@ -91,6 +93,8 @@ let transaction = new Transaction({
 `confirmed: Function`: Callback to be executed if transaction has been confirmed once by the network.
 
 `ensured: Function`: Callback to be executed if transaction has been reached safe amount of confirmations (successful transaction confirmation can be ensured).
+
+`failed: Function`: Callback to be executed if transaction failed to confirm on the network (aka reverted).
 
 #### value
 
@@ -132,13 +136,16 @@ You can configure the following attributes inisde an object passed to `submit`:
 
 `ensured: function`: Callback to be executed if transaction has been reached safe amount of confirmations (confirmation can be fairly assumed to be ensured).
 
+`failed: function`: Callback to be executed if transaction failed to confirm on the network (aka reverted).
+
 Passing additional callbacks in the `submit` object will not override already defined callbacks but will queue additional ones.
 
 ```javascript
 transaction.submit({
   sent: ()=>{ 'do something' },
   confirmed: ()=>{ 'do something' },
-  ensured: ()=>{ 'do something' }
+  ensured: ()=>{ 'do something' },
+  failed: ()=>{ 'do something' }
 })
 ```
 

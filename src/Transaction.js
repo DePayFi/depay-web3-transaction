@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import { CONSTANTS } from 'depay-web3-constants'
 
 class Transaction {
-  constructor({ blockchain, address, api, method, params, value, sent, confirmed, ensured }) {
+  constructor({ blockchain, address, api, method, params, value, sent, confirmed, ensured, failed }) {
     this.blockchain = blockchain
     this.address = address
     this.api = api
@@ -14,8 +14,10 @@ class Transaction {
     this.sent = sent
     this.confirmed = confirmed
     this.ensured = ensured
+    this.failed = ensured
     this._confirmed = false
     this._ensured = false
+    this._failed = false
   }
 
   bigNumberify(value) {
@@ -52,15 +54,28 @@ class Transaction {
     })
   }
 
+  failure() {
+    if (this._failed) {
+      return Promise.resolve(this)
+    }
+    return new Promise((resolve, reject) => {
+      let originalFailed = this.failed
+      this.failed = () => {
+        if (originalFailed) originalFailed(this)
+        resolve(this)
+      }
+    })
+  }
+
   submit(options) {
-    let { sent, confirmed, ensured } = options ? options : {}
+    let { sent, confirmed, ensured, failed } = options ? options : {}
 
     switch (this.blockchain) {
       case 'ethereum':
-        return submitEthereum({ transaction: this, sent, confirmed, ensured })
+        return submitEthereum({ transaction: this, sent, confirmed, ensured, failed })
         break
       case 'bsc':
-        return submitBsc({ transaction: this, sent, confirmed, ensured })
+        return submitBsc({ transaction: this, sent, confirmed, ensured, failed })
         break
       default:
         throw('Web3Transaction: Unknown blockchain')

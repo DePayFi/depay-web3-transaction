@@ -31,7 +31,7 @@ const submitSimpleTransfer = ({ transaction, signer })=>{
   })
 }
 
-const processSubmission = ({ sentTransaction, transaction, sent, confirmed, ensured, resolve, reject })=> {
+const processSubmission = ({ sentTransaction, transaction, sent, confirmed, ensured, failed, resolve, reject })=> {
   if (sentTransaction) {
     transaction.id = sentTransaction.hash
     if (transaction.sent) transaction.sent(transaction)
@@ -40,6 +40,10 @@ const processSubmission = ({ sentTransaction, transaction, sent, confirmed, ensu
       transaction._confirmed = true
       if (transaction.confirmed) transaction.confirmed(transaction)
       if (confirmed) confirmed(transaction)
+    }).catch((error)=>{
+      transaction._failed = true
+      if(transaction.failed) transaction.failed(transaction)
+      if(failed) failed(transaction)
     })
     sentTransaction.wait(12).then(() => {
       transaction._ensured = true
@@ -52,20 +56,20 @@ const processSubmission = ({ sentTransaction, transaction, sent, confirmed, ensu
   }
 }
 
-export default function ({ transaction, provider, sent, confirmed, ensured }) {
+export default function ({ transaction, provider, sent, confirmed, ensured, failed }) {
   return new Promise((resolve, reject) => {
     let signer = provider.getSigner(0)
 
     if(transaction.method) {
       submitContractInteraction({ transaction, signer, provider })
-        .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, resolve, reject }))
+        .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, failed, resolve, reject }))
         .catch((error)=>{
           console.log(error)
           reject('Web3Transaction: Submitting transaction failed!')
         })
     } else {
       submitSimpleTransfer({ transaction, signer })
-        .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, resolve, reject }))
+        .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, failed, resolve, reject }))
         .catch((error)=>{
           console.log(error)
           reject('Web3Transaction: Submitting transaction failed!')
