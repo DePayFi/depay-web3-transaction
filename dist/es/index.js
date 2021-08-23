@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { getWallet } from 'depay-web3-wallets';
 import { CONSTANTS } from 'depay-web3-constants';
 
 const argsFromTransaction = ({ transaction, contract })=> {
@@ -57,24 +58,35 @@ const processSubmission = ({ sentTransaction, transaction, sent, confirmed, ensu
   }
 };
 
-function submit ({ transaction, provider, sent, confirmed, ensured, failed }) {
-  return new Promise((resolve, reject) => {
-    let signer = provider.getSigner(0);
+const executeSubmit = ({ transaction, provider, sent, confirmed, ensured, failed, signer, resolve, reject }) => {
+  if(transaction.method) {
+    submitContractInteraction({ transaction, signer, provider })
+      .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, failed, resolve, reject }))
+      .catch((error)=>{
+        console.log(error);
+        reject('Web3Transaction: Submitting transaction failed!');
+      });
+  } else {
+    submitSimpleTransfer({ transaction, signer })
+      .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, failed, resolve, reject }))
+      .catch((error)=>{
+        console.log(error);
+        reject('Web3Transaction: Submitting transaction failed!');
+      });
+  }
+};
 
-    if(transaction.method) {
-      submitContractInteraction({ transaction, signer, provider })
-        .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, failed, resolve, reject }))
-        .catch((error)=>{
-          console.log(error);
-          reject('Web3Transaction: Submitting transaction failed!');
-        });
-    } else {
-      submitSimpleTransfer({ transaction, signer })
-        .then((sentTransaction)=>processSubmission({ sentTransaction, transaction, sent, confirmed, ensured, failed, resolve, reject }))
-        .catch((error)=>{
-          console.log(error);
-          reject('Web3Transaction: Submitting transaction failed!');
-        });
+function submit ({ transaction, provider, sent, confirmed, ensured, failed }) {
+  return new Promise(async (resolve, reject) => {
+    let signer = provider.getSigner(0);
+    let wallet = await getWallet();
+
+    if(await wallet.connectedTo(transaction.blockchain)) {
+      executeSubmit({ transaction, provider, sent, confirmed, ensured, failed, signer, resolve, reject });
+    } else { // connected to wrong network
+      wallet.switchTo(transaction.blockchain)
+        .then(()=>executeSubmit({ transaction, provider, sent, confirmed, ensured, failed, signer, resolve, reject }))
+        .catch(reject);
     }
   })
 }

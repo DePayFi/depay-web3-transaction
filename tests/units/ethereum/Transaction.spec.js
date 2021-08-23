@@ -195,4 +195,25 @@ describe('Ethereum Transaction', () => {
     
     expect(failedCalled).toEqual(true);
   });
+
+  it("switches network if trying to send a transaction to another network", async ()=> {
+    let switchMock = mock({
+      blockchain: 'ethereum',
+      network: {
+        switchTo: 'bsc'
+      }
+    })
+
+    let transaction = new Transaction({
+      blockchain: 'bsc',
+      address: address,
+      api: api,
+      method: method,
+      params: params
+    });
+
+    await transaction.submit()
+
+    expect(switchMock).toHaveBeenCalled()
+  })
 });

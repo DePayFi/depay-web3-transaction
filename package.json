@@ -1,7 +1,7 @@
 {
   "name": "depay-web3-transaction",
   "moduleName": "Web3Transaction",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "JavaScript library abstracting web3 blockchain transactions. Including lazy execution, confirmation tracking etc.",
   "main": "dist/cjs/index.js",
   "module": "dist/es/index.js",
@@ -34,7 +34,8 @@
   "homepage": "https://github.com/DePayFi/depay-web3-transaction#readme",
   "private": false,
   "dependencies": {
-    "depay-web3-constants": "^2.0.0",
+    "depay-web3-constants": "^3.0.1",
+    "depay-web3-wallets": "^5.1.0",
     "ethers": "^5.4.5"
   },
   "peerDependencies": {},
@@ -50,7 +51,7 @@
     "@rollup/plugin-sucrase": "^3.1.0",
     "babel-loader": "^8.2.2",
     "babel-preset-env": "^1.7.0",
-    "depay-web3-mock": "^5.6.0",
+    "depay-web3-mock": "^5.8.1",
     "eslint": "^7.15.0",
     "eslint-loader": "^4.0.2",
     "eslint-plugin-import": "^2.22.1",
