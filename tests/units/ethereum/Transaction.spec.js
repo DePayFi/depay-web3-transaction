@@ -3,6 +3,11 @@ import { mock, resetMocks, confirm, fail, increaseBlock } from 'depay-web3-mock'
 
 describe('Ethereum Transaction', () => {
 
+  const blockchain = 'ethereum'
+  const accounts = ['0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045']
+  beforeEach(resetMocks)
+  beforeEach(()=>mock({ blockchain, accounts: { return: accounts } }))
+
   let address = '0xae60aC8e69414C2Dc362D0e6a03af643d1D85b92';
   let api = [{"inputs":[{"internalType":"address","name":"_configuration","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"ETH","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"configuration","outputs":[{"internalType":"contract DePayRouterV1Configuration","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"pluginAddress","type":"address"}],"name":"isApproved","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"},{"internalType":"address[]","name":"addresses","type":"address[]"},{"internalType":"address[]","name":"plugins","type":"address[]"},{"internalType":"string[]","name":"data","type":"string[]"}],"name":"route","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}];
   let method = 'route';
@@ -18,8 +23,6 @@ describe('Ethereum Transaction', () => {
   let mockedTransaction;
 
   beforeEach(()=>{
-    resetMocks()
-
     mockedTransaction = mock({
       blockchain: 'ethereum',
       transaction: {
@@ -32,7 +35,7 @@ describe('Ethereum Transaction', () => {
     
     transaction = new Transaction({
       blockchain: 'ethereum',
-      address: address,
+      to: address,
       api: api,
       method: method,
       params: params
@@ -44,7 +47,7 @@ describe('Ethereum Transaction', () => {
   it('initalizes a transaction that can be submitted later', async ()=> {
     expect(typeof(transaction)).toBe('object');
     expect(transaction.blockchain).toEqual('ethereum');
-    expect(transaction.address).toEqual(address);
+    expect(transaction.to).toEqual(address);
     expect(transaction.api).toEqual(api);
     expect(transaction.method).toEqual('route');
     expect(transaction.params).toEqual(params);
@@ -197,6 +200,8 @@ describe('Ethereum Transaction', () => {
   });
 
   it("switches network if trying to send a transaction to another network", async ()=> {
+    mock({ blockchain: 'bsc', accounts: { return: accounts } })
+
     let switchMock = mock({
       blockchain: 'ethereum',
       network: {
@@ -206,7 +211,7 @@ describe('Ethereum Transaction', () => {
 
     let transaction = new Transaction({
       blockchain: 'bsc',
-      address: address,
+      to: address,
       api: api,
       method: method,
       params: params

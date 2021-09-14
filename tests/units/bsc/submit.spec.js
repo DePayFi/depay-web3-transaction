@@ -3,8 +3,10 @@ import { mock, resetMocks, confirm, increaseBlock } from 'depay-web3-mock'
 
 describe('submit BSC Transaction', () => {
 
+  const blockchain = 'bsc'
+  const accounts = ['0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045']
   beforeEach(resetMocks)
-  afterEach(resetMocks)
+  beforeEach(()=>mock({ blockchain, accounts: { return: accounts } }))
 
   let toAddress = '0xae60aC8e69414C2Dc362D0e6a03af643d1D85b92';
 
@@ -21,7 +23,7 @@ describe('submit BSC Transaction', () => {
 
       let transaction = new Transaction({
         blockchain: 'bsc',
-        address: toAddress,
+        to: toAddress,
         value: 0.123
       })
 
@@ -56,7 +58,7 @@ describe('submit BSC Transaction', () => {
       
       let transaction = new Transaction({
         blockchain: 'bsc',
-        address: toAddress,
+        to: toAddress,
         api: api,
         method: method,
         params: params
@@ -83,7 +85,7 @@ describe('submit BSC Transaction', () => {
       
       let transaction = new Transaction({
         blockchain: 'bsc',
-        address: toAddress,
+        to: toAddress,
         api: api,
         method: method,
         params: params
@@ -110,7 +112,7 @@ describe('submit BSC Transaction', () => {
       
       let transaction = new Transaction({
         blockchain: 'bsc',
-        address: toAddress,
+        to: toAddress,
         api: api,
         method: method,
         params: params

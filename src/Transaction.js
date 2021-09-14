@@ -4,9 +4,10 @@ import { ethers } from 'ethers'
 import { CONSTANTS } from 'depay-web3-constants'
 
 class Transaction {
-  constructor({ blockchain, address, api, method, params, value, sent, confirmed, ensured, failed }) {
+  constructor({ blockchain, from, to, api, method, params, value, sent, confirmed, ensured, failed }) {
     this.blockchain = blockchain
-    this.address = address
+    this.from = from
+    this.to = to
     this.api = api
     this.method = method
     this.params = params

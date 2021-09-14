@@ -19,8 +19,7 @@ const argsFromTransaction = ({ transaction, contract })=> {
 };
 
 const submitContractInteraction = ({ transaction, signer, provider })=>{
-  let contract = new ethers.Contract(transaction.address, transaction.api, provider);
-
+  let contract = new ethers.Contract(transaction.to, transaction.api, provider);
   return contract
     .connect(signer)
     [transaction.method](...argsFromTransaction({ transaction, contract }), { value: transaction.value })
@@ -28,7 +27,7 @@ const submitContractInteraction = ({ transaction, signer, provider })=>{
 
 const submitSimpleTransfer = ({ transaction, signer })=>{
   return signer.sendTransaction({
-    to: transaction.address,
+    to: transaction.to,
     value: transaction.value
   })
 };
@@ -80,7 +79,7 @@ function submit ({ transaction, provider, sent, confirmed, ensured, failed }) {
   return new Promise(async (resolve, reject) => {
     let signer = provider.getSigner(0);
     let wallet = await getWallet();
-
+    transaction.from = await signer.getAddress();
     if(await wallet.connectedTo(transaction.blockchain)) {
       executeSubmit({ transaction, provider, sent, confirmed, ensured, failed, signer, resolve, reject });
     } else { // connected to wrong network
@@ -120,9 +119,10 @@ function submitBsc ({ transaction, sent, confirmed, ensured, failed }) {
 }
 
 class Transaction {
-  constructor({ blockchain, address, api, method, params, value, sent, confirmed, ensured, failed }) {
+  constructor({ blockchain, from, to, api, method, params, value, sent, confirmed, ensured, failed }) {
     this.blockchain = blockchain;
-    this.address = address;
+    this.from = from;
+    this.to = to;
     this.api = api;
     this.method = method;
     this.params = params;

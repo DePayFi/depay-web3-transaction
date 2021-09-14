@@ -2253,13 +2253,10 @@ depay-web3-constants@^3.0.1:
   resolved "https://registry.yarnpkg.com/depay-web3-constants/-/depay-web3-constants-3.0.1.tgz#c8979b063de9b875eb7692e8d93b0c9da80232b9"
   integrity sha512-bRHj8mLnXuPWORZ6eE/2qKry3C9k7W7z4EHPKc5cruTJuBLnhN/zqmZWo/3nbEMaqd6n2tI/ObwW6bzA+E4rlg==
 
-depay-web3-mock@^5.9.0:
-  version "5.9.0"
-  resolved "https://registry.yarnpkg.com/depay-web3-mock/-/depay-web3-mock-5.9.0.tgz#9f2b4fab47424a04804cc74b41cc0c6fe2b3e040"
-  integrity sha512-YbeFaZQjx10QoSBaQv2kqhUWm4MxeMnnA6w/Auctntck3t3DGWFlYMYGBSgnz4aVh/HNrqlWoRRnZmTSYLfyNw==
-  dependencies:
-    depay-web3-blockchains "^2.4.0"
-    ethers "^5.4.4"
+depay-web3-mock@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/depay-web3-mock/-/depay-web3-mock-8.0.0.tgz#bb08137e9b8ad5f8e193e239b131b06a0921f884"
+  integrity sha512-Oy8Rm6sHwlca/HRsbJV56niaOz43GsxYGLNeiAOW6rMVJDrHY/LbBB6BWiYXVyTCTyFl+8iusSyQA7/XlepsPQ==
 
 depay-web3-wallets@^5.1.1:
   version "5.1.1"
@@ -2548,7 +2545,7 @@ esutils@^2.0.2:
   resolved "https://registry.yarnpkg.com/esutils/-/esutils-2.0.3.tgz#74d2eb4de0b8da1293711910d50775b9b710ef64"
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
-ethers@^5.4.4, ethers@^5.4.6:
+ethers@^5.4.6:
   version "5.4.6"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.4.6.tgz#fe0a023956b5502c947f58e82fbcf9a73e5e75b6"
   integrity sha512-F7LXARyB/Px3AQC6/QKedWZ8eqCkgOLORqL4B/F0Mag/K+qJSFGqsR36EaOZ6fKg3ZonI+pdbhb4A8Knt/43jQ==
