@@ -7,6 +7,7 @@
     <title>Demo</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdn.ethers.io/lib/ethers-5.4.umd.min.js" type="application/javascript"></script>
+    <script crossorigin src="https://unpkg.com/depay-web3-blockchains@2/dist/umd/index.js"></script>
     <script crossorigin src="https://unpkg.com/depay-web3-constants@3/dist/umd/index.js"></script>
     <script crossorigin src="https://unpkg.com/depay-web3-wallets@5/dist/umd/index.js"></script>
     <script src="dist/umd/index.js"></script>
@@ -18,6 +19,47 @@
         <div class="col">
           <h1>DePay Web3Transaction</h1>
           <p>Open the browser inspector and try: `Web3Transaction.Transaction`</p>
+        </div>
+      </div>
+
+      <div class="row pt-5">
+        <div class="col">
+          <h1>Test Simple Transaction Submission</h1>
+          <p>Executes callback function in case event happens</p>
+          <script>
+            window.testTransactionSubmission = ()=> {
+              let transaction = new Web3Transaction.Transaction({ blockchain: 'ethereum', value: 0.001, to: '0x4e260bB2b25EC6F3A59B478fCDe5eD5B8D783B02' })
+              transaction.submit()
+            }
+          </script>
+          <button class='btn btn-primary' onClick='window.testTransactionSubmission()'>Test it</button>
+        </div>
+      </div>
+
+      <div class="row pt-5">
+        <div class="col">
+          <h1>Smart Contract Transaction Submission</h1>
+          <p>Executes callback function in case event happens</p>
+          <script>
+            window.testSmartContractTransactionSubmission = ()=> {
+              let transaction = new Web3Transaction.Transaction({
+                blockchain: 'ethereum',
+                to: '0xae60aC8e69414C2Dc362D0e6a03af643d1D85b92',
+                api: [{"inputs":[{"internalType":"address","name":"_configuration","type":"address"}],"stateMutability":"nonpayable","type":"constructor"},{"inputs":[],"name":"ETH","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"configuration","outputs":[{"internalType":"contract DePayRouterV1Configuration","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"pluginAddress","type":"address"}],"name":"isApproved","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"},{"internalType":"address[]","name":"addresses","type":"address[]"},{"internalType":"address[]","name":"plugins","type":"address[]"},{"internalType":"string[]","name":"data","type":"string[]"}],"name":"route","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"withdraw","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"stateMutability":"payable","type":"receive"}],
+                method: 'route',
+                params: {
+                  path: ['0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'],
+                  amounts: [1000000000000000, 1000000000000000],
+                  addresses: ["0xc742E40367a2cFc207e50E690D6d43F96A4FCFFf", "0xc742E40367a2cFc207e50E690D6d43F96A4FCFFf"],
+                  plugins: [],
+                  data: []
+                },
+                value: 0.0015
+              })
+              transaction.submit()
+            }
+          </script>
+          <button class='btn btn-primary' onClick='window.testSmartContractTransactionSubmission()'>Test it</button>
         </div>
       </div>
 
